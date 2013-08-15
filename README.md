@@ -1,8 +1,7 @@
 Derek's Hackernews Crap Filter
 =========
-v0.1 - 14-Aug-2013 - warren@sfu.ca
-
-Initial release.
+v0.2 - 15-Aug-2013 - tiberiu@tiberiuana.com - Moar web!
+v0.1 - 14-Aug-2013 - warren@sfu.ca - Initial release.
 
 Manifesto
 -
