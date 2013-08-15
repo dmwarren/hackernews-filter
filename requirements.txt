@@ -1,3 +1,2 @@
 beautifulsoup4>=4.3.0
-bottle>=0.11.6
 requests>=0.14
