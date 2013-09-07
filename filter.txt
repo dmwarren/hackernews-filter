@@ -1,0 +1,87 @@
+# Go read something more fulfilling
+(?i).*(thenextweb|scribd|phoronix|gigaom|slideshare|stratechery).*
+(?i).*(qz|medium\.com).*
+(?i).*medium\.com*
+
+(?i).*Thoughts\ on\ .*
+
+# pseudojournalism
+(?i).*(businessinsider|techcrunch|crunchbase).*
+
+# pseudouseful
+(?i).*LinkedIn.*
+
+# I don't care about your touch device app 
+# or your CSS framework
+(?i).*(spotify|whatsapp).*
+(?i).*(javascript|jquery|in\ (the|your)\ browser).*
+
+# Have a nice trip
+(?i).*spacex.*
+
+# "You know, before Twitter, we used to keep all these thoughts
+#  to ourselves." -- Letterman
+(?i).*(facebook|twitter|tweet).*
+
+# Any game produced after 1993 is not worth playing
+(?i).*(steam|valve).*
+
+# I really don't care about Bitcoin
+(?i).*(coinbase|mt(. )?gox|bitcoin).*
+.*(BTC|LTC).*
+
+# "You have zero privacy anyway. Get over it." --Scott McNealy
+# You're shocked the NSA is spying on people?
+# What did you think they were doing?
+(?i).*(lavabit|wikileaks|keyscore).*
+(?i).*(manning|assange).*
+(?i).*(wiretap|surveillance).*
+.*(PRISM|NSA|FISA|Silent\ Mail).*
+
+# At least one self-gratifying fluff story
+(?i).*justinjackson.ca.*
+
+# I like my reality, not yours
+.*(Rift|Oculus|Glass).*
+
+# no new stories since 2004--stop posting everything 
+# from these sites just because you discovered it this afternoon
+(?i).*folklore\.org.*
+
+# Remember when Apple cared about computers and pro customers?
+.*i(OS|Cloud).*
+
+# I just don't care
+(?i).*(tesla|hyperloop).*
+.*Elon\ .*
+.*Musk.*
+
+# YesSQL
+(?i).*(mongo|couch).*
+(?i).*(rethinkdb|nosql)....*
+.*Redis.*
+
+# I don't care about HN/startup culture and buzzwords
+(?i).*help\ us\ .*
+(?i).*(disrupt|broken|growhack).*
+(?i).*(pitch|founder|entrepren|startup).*
+(?i).*help\ us\ .*
+.*VC.*
+.*Show\ HN.*
+(?i).*technical.*
+
+# Just leave and shut up
+(?i).*Why\ I\ (think|left).*
+(?i).*Why\ I'm\ leaving.*
+
+# Technical articles, please.
+(?i).*(swartz|aaronsw).*
+
+# I'm an old-fashioned fart with a single server
+(?i).*(cloud|heroku).*
+
+# NO
+(?i).*(kickstarter|kick\.st).*
+(?i).*(indiegogo|igg\.me).*
+(?i).*crowd.*
+(?i).*patent.*

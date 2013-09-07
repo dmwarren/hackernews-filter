@@ -1,87 +1,23 @@
 #!/usr/bin/env python
+from hn_filter_core import get_stories, filter_stories
+from pprint import pprint
 
-# Derek's Hackernews Crap Filter
-# v0.1 - 14-Aug-2013 - warren@sfu.ca
-# Initial release.
+BOLDON = "\033[1m"
+BOLDOFF = "\033[0m"
 
-import re, requests, fileinput
-from bs4 import BeautifulSoup
-# I like that we have to import a 'bs' library
-# to build this kind of thing
+stories = get_stories()
+filtered_stories = filter_stories(stories)
 
-
-SCAN_URL = 'https://news.ycombinator.com/'
-VERBOTEN_LIST = 'hn-verboten.txt'
-
-def get_stories():
-	"""
-	Scrapes HN stories and filters the collection.
-	"""
-
-	story_rows = []
-	stories = []
-
-	# fetch!
-	r = requests.get(SCAN_URL, verify=False)
-	souped_body = BeautifulSoup(r.text)
-
-	try:
-		storytable_html = souped_body('table')[2]
-	except IndexError:
-		raise Exception("Can't find news story table. hackernews HTML format changed.")
-
-	raw_stories = storytable_html.find_all('tr')
-	for tr in raw_stories:
-		row = str(tr) # we (sometimes) want strings, not BeautifulSoup tag objects
-
-		# Skip to next iteration of for loop if you see a superfluous table row.
-		# (anything without a 'vote?for=' link which also skips sponsored posts.
-		# score!)
-		if not re.match(r'.*"vote\?for=.*', row):
-			continue
-		story_rows.append(tr)
-
-	for story_row in story_rows:
-		story = {}
-		story['title'] = story_row.find_all('a')[1].string
-		story['link'] = story_row.find_all('a')[1].get('href')
-		# Handle relative HN links
-		if not story['link'].startswith('http'):
-			story['link'] = SCAN_URL + story['link']
-		stories.append(story)
-
-	return stories
-
-
-def filter_stories(stories):
-	"""
-	Filters HN stories.
-	"""
-	result = {
-		'good': [],
-		'crap': []
-	}
-	# suck in filter words
-	patterns = []
-	for line in fileinput.input(VERBOTEN_LIST):
-		patterns.append(line.strip())
-	combined_re = "(" + ")|(".join(patterns) + ")"
-	compiled_re = re.compile(combined_re)
-
-	for story in stories:
-		if compiled_re.match(story['title']):
-			result['crap'].append(story)
-		else:
-			result['good'].append(story)
-	return result
-	
-
-# 14-Aug-2013 - good:crap ratio is 16:14 this afternoon.
-# So many extra free brain resources!
+good_stories = filtered_stories['good']
+crap_stories = filtered_stories['crap']
 
 if __name__ == '__main__':
-	print filter_stories(get_stories())
-
-
-
+	for story in filtered_stories['good']:
+		#pprint(filtered_stories['good'])
+ 		print(BOLDON + story['title'] + BOLDOFF) 
+ 		print("  " + story['link'])
+		print("")
+		
+	print("Good: " + str(len(good_stories)))
+	print("Crap: " + str(len(crap_stories)))
 

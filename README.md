@@ -1,10 +1,8 @@
 Derek's Hackernews Crap Filter
-=========
-v0.2 - 15-Aug-2013 - tiberiu@tiberiuana.com - Moar web!
-v0.1 - 14-Aug-2013 - warren@sfu.ca - Initial release.
+==
 
 Manifesto
--
+--
 
 Do you like the technical articles that filter through Hacker News (http://news.ycombinator.com)?
 
@@ -15,42 +13,55 @@ Are you **really** tired of schmaltz and chaff like this?
 
 
 No longer.
--
+--
 
-Stick your most-hated buzzphrases in hn-verboten.txt, run hn-filter.py and Be Happy.  But that's not all!  You also get my list of irritating buzzwords as a default filter set.  It slices, it dices, it kills monsters!
+- Stick your most-hated buzzphrases in filter.txt.
+- Run hn_filter.py in a terminal session.
+- Or run hn_filter_server.py and visit http://localhost:31337/
+
+
+But that's not all!
+--
+
+You also get my list of irritating buzzwords as a default filter set.  It slices, it dices, it kills monsters!
 
 [Cmd]+Double-Click URLs in Mac OS X Terminal.app to open them.
 
+
 Requirements
--
+--
 
 - Python 2.7-ish
 - Python modules: BeautifulSoup and Requests
 
 
+
 Alternatives
--
+--
 
 There are other Hacker News filters (http://hnapp.com/) but they don't accommodate the level of grumpiness I have achieved (70+ entries in the default killfile).
 
 
 
+
+Version History
+--
+
+v0.3 - 07-Sep-2013
+
+- Bring back console version. Web version optional.
+- Allow comments in killfile.
+- Killfile updated with latest curmudgeonry.
+- Clean up filenames.
+
+v0.2 - 15-Aug-2013
+
+- Use bottle.py to provide a web interface.  Contributed by tiberiu@tiberiuana.com (thank you)
+
+v0.1 - 14-Aug-2013
+
+- Initial release.
+
+
+
 Have a nice day.
-
-
-
-License
--
-
-Derek's Hackernews Crap Filter is distributed under the following BSD-style license.
-
-Copyright (c) 2013 Derek Warren. All Rights Reserved. Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-- Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-- The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-

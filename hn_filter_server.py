@@ -1,6 +1,7 @@
+#!/usr/bin/env python
 from bottle import route, run, template
 
-from hn_filter import get_stories, filter_stories
+from hn_filter_core import get_stories, filter_stories
 
 @route('/')
 def index():
