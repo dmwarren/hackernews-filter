@@ -17,7 +17,8 @@
 (?i).*(javascript|jquery|in\ (the|your)\ browser).*
 
 # Have a nice trip
-(?i).*spacex.*
+(?i).*(spacex|airbnb).*
+.*Uber.*
 
 # "You know, before Twitter, we used to keep all these thoughts
 #  to ourselves." -- Letterman
@@ -71,7 +72,7 @@
 (?i).*technical.*
 
 # Just leave and shut up
-(?i).*Why\ I\ (think|left).*
+(?i).*Why\ I\ (think|left|don't).*
 (?i).*Why\ I'm\ leaving.*
 
 # Technical articles, please.
