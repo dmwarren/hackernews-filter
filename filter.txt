@@ -1,15 +1,21 @@
 # Go read something more fulfilling
 (?i).*(thenextweb|scribd|phoronix|gigaom|slideshare|stratechery).*
-(?i).*(qz|medium\.com).*
-(?i).*medium\.com*
-
+(?i).*(qz|zdnet|medium\.com).*
 (?i).*Thoughts\ on\ .*
 
 # pseudojournalism
 (?i).*(businessinsider|techcrunch|crunchbase).*
 
+# you're almost buzzfeed now but you have more annoying
+# modal ads and "share this now pleeeease" prompts than
+# even they do
+(?i).*(fastcolabs).*
+
 # pseudouseful
 (?i).*LinkedIn.*
+
+# sorry, your ideas don't fit in my Commodore 64
+(?i).*big\ data.*
 
 # I don't care about your touch device app 
 # or your CSS framework
@@ -27,17 +33,37 @@
 # Any game produced after 1993 is not worth playing
 (?i).*(steam|valve).*
 
+# apostrophes and commas are not toys
+(?i).*jacquesmattheij.*
+
+# fragile waterfall methodology
+# blah blah blah design the design before you design it
+# because software is simple, right?
+# that will totally work
+(?i).*\ agile.*
+
+# speaking of pipe dreams
+(?i).*neutrality.*
+
 # I really don't care about Bitcoin
-(?i).*(coinbase|mt(. )?gox|bitcoin).*
+(?i).*(coinbase|mt(. ?)?gox).*
 .*(BTC|LTC).*
+(?i).*(strange|doge|bit|lite|flex|name)coin.*
+(?i).*(satoshi|nakamoto).*
+(?i).*cryptocurrency.*
+(?i).*wallet.*
+(?i).*coinye.*
 
 # "You have zero privacy anyway. Get over it." --Scott McNealy
+#
 # You're shocked the NSA is spying on people?
 # What did you think they were doing?
+#
 (?i).*(lavabit|wikileaks|keyscore).*
-(?i).*(manning|assange).*
+(?i).*(manning|assange|snowden).*
 (?i).*(wiretap|surveillance).*
-.*(PRISM|NSA|FISA|Silent\ Mail).*
+(?i).*drone.*
+.*(CIA|PRISM|NSA|FISA|CryptoSeal|Silent\ (Mail|Circle)).*
 
 # At least one self-gratifying fluff story
 (?i).*justinjackson.ca.*
@@ -52,28 +78,42 @@
 # Remember when Apple cared about computers and pro customers?
 .*i(OS|Cloud).*
 
+# The Sugarhill Gang were rap geniuses. You are not a rap genius.
+# You wouldn't even be polluting the front page if you weren't a Heroku customer.
+(?i).*rapgenius.*
+
 # I just don't care
 (?i).*(tesla|hyperloop).*
 .*Elon\ .*
 .*Musk.*
+.*Mark\ Cuban.*
 
 # YesSQL
 (?i).*(mongo|couch).*
 (?i).*(rethinkdb|nosql)....*
-.*Redis.*
+.*(Redis|Riak).*
 
 # I don't care about HN/startup culture and buzzwords
 (?i).*help\ us\ .*
-(?i).*(disrupt|broken|growhack).*
-(?i).*(pitch|founder|entrepren|startup).*
+(?i).*(disrupt|broken|growhack|growth|hiring|\ hire).*
+(?i).*(pitch|founder|entrepren|startup|co(-)?found|fundrais).*
+.*samaltman\.com.*
+(?i).*Y\ Combinator.*
 (?i).*help\ us\ .*
 .*VC.*
-.*Show\ HN.*
+.*YC\ *
+.*(Show|Ask|Tell)\ HN.*
 (?i).*technical.*
 
-# Just leave and shut up
-(?i).*Why\ I\ (think|left|don't).*
-(?i).*Why\ I'm\ leaving.*
+# three times in one week
+(?i).*first\ [0-9],?0*\ users.*
+
+# "Why I'm leaving Digg" ... "Why I think xyz"
+# Do more, talk less
+(?i).*Why\ I.*
+
+# "How I Developed Better Article Titles"
+(?i).*How\ I.*
 
 # Technical articles, please.
 (?i).*(swartz|aaronsw).*
@@ -82,7 +122,7 @@
 (?i).*(cloud|heroku).*
 
 # NO
-(?i).*(kickstarter|kick\.st).*
+(?i).*(kickstart|kick\.st).*
 (?i).*(indiegogo|igg\.me).*
 (?i).*crowd.*
 (?i).*patent.*
