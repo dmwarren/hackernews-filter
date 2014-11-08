@@ -16,6 +16,7 @@ No longer.
 --
 
 - Stick your most-hated buzzphrases in filter.txt.
+- Terminal.app => Profiles => Advanced => [x] Set locale environment variables on startup
 - Run hn_filter.py in a terminal session.
 - Or run hn_filter_server.py and visit http://localhost:31337/
 
@@ -31,7 +32,7 @@ You also get my list of irritating buzzwords as a default filter set.  It slices
 Requirements
 --
 
-- Python 2.7-ish
+- Python 2.7 or Python 3.4
 - Python modules: BeautifulSoup and Requests
 
 
@@ -46,6 +47,11 @@ There are other Hacker News filters (http://hnapp.com/) but they don't accommoda
 
 Version History
 --
+
+v0.4 - 08-Nov-2014
+- Add Python 3.x compatibility (tested with 3.4)
+  (if you're on OS X, be sure to enable "Set locale environment variables on startup" in Terminal.app)
+- HN is now all SSL, all the time, so enable SSL verification
 
 v0.3 - 07-Sep-2013
 
