@@ -14,10 +14,13 @@
 # pseudouseful
 (?i).*LinkedIn.*
 
+# if you submit the Wikipedia article on the Kola Borehole ONE MORE TIME...
+(?i).*borehole*
+
 # sorry, your ideas don't fit in my Commodore 64
 (?i).*big\ data.*
 
-# I don't care about your touch device app 
+# I don't care about your touch device app
 # or your CSS framework
 (?i).*(spotify|whatsapp).*
 (?i).*(javascript|jquery|in\ (the|your)\ browser).*
@@ -71,7 +74,7 @@
 # I like my reality, not yours
 .*(Rift|Oculus|Glass).*
 
-# no new stories since 2004--stop posting everything 
+# no new stories since 2004--stop posting everything
 # from these sites just because you discovered it this afternoon
 (?i).*folklore\.org.*
 
@@ -117,6 +120,7 @@
 
 # Technical articles, please.
 (?i).*(swartz|aaronsw).*
+.*jacquesmattheij.com.*
 
 # I'm an old-fashioned fart with a single server
 (?i).*(cloud|heroku).*

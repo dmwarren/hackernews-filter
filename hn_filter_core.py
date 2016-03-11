@@ -22,7 +22,7 @@ def get_stories():
 
     # fetch!
     r = requests.get(SCAN_URL, verify=True)
-    souped_body = BeautifulSoup(r.text)
+    souped_body = BeautifulSoup(r.text, 'lxml')
 
     try:
         storytable_html = souped_body('table')[2]

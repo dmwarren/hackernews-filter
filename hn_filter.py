@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from hn_filter_core import get_stories, filter_stories
 
 BOLDON = "\033[1m"
