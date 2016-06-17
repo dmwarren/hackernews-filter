@@ -130,3 +130,13 @@
 (?i).*(indiegogo|igg\.me).*
 (?i).*crowd.*
 (?i).*patent.*
+
+
+# I'm really sorry to put your esteemed organization in my killfile
+# but your web articles from this century belong on medium.com or worse.
+#
+# If the substance and quality of your interstitial ad code is
+# greater than that of your articles, you might want to reconsider
+# your place in the universe.
+
+.*spectrum.ieee.org.*

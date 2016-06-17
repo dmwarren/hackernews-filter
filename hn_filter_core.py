@@ -39,7 +39,7 @@ def get_stories():
         # (anything without a 'vote?for=' link which also skips sponsored posts.
         # score!)
 
-        if not re.match(r'.*"vote\?for=.*', str(row)):
+        if not re.match(r'.*"vote\?id=\d+.*', str(row)):
             continue
         story_rows.append(tr)
 
