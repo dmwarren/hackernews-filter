@@ -56,7 +56,6 @@
 (?i).*cryptocurrency.*
 (?i).*wallet.*
 (?i).*coinye.*
-(?i).*ethereum.*
 
 # "You have zero privacy anyway. Get over it." --Scott McNealy
 #
