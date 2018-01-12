@@ -66,6 +66,9 @@
 (?i).*wallet.*
 (?i).*coinye.*
 
+# we get it.
+(?i).*blockchain.*
+
 # "You have zero privacy anyway. Get over it." --Scott McNealy
 #
 # You're shocked the NSA is spying on people?
