@@ -65,6 +65,7 @@
 (?i).*cryptocurrency.*
 (?i).*wallet.*
 (?i).*coinye.*
+(?i).*ethereum.*
 
 # we get it.
 (?i).*blockchain.*
