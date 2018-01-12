@@ -18,12 +18,21 @@
 (?i).*borehole*
 
 # sorry, your ideas don't fit in my Commodore 64
-(?i).*big\ data.*
+(?i).*(big.*data|data.*big).*
+(?i).*(deep.*learning|learning.*deep).*
+(?i).*(machine.*learning|learning.*machine).*
+(?i).*(artificial.*intelligence|intelligence.*artificial).*
 
 # I don't care about your touch device app
 # or your CSS framework
 (?i).*(spotify|whatsapp).*
 (?i).*(javascript|jquery|in\ (the|your)\ browser).*
+
+# Chat apps are so 90s
+(?i).*(whatsapp|telegram|diaspora|matrix|riot|signal|skype).*
+
+# Cloud storage, not again
+(?i).*(one\ drive|dropbox).*
 
 # Have a nice trip
 (?i).*(spacex|airbnb).*
@@ -51,7 +60,7 @@
 # I really don't care about Bitcoin
 (?i).*(coinbase|mt(. ?)?gox).*
 .*(BTC|LTC).*
-(?i).*(strange|doge|bit|lite|flex|name)coin.*
+(?i).*(strange|doge|bit|lite|flex|name|sim|file)coin.*
 (?i).*(satoshi|nakamoto).*
 (?i).*cryptocurrency.*
 (?i).*wallet.*
