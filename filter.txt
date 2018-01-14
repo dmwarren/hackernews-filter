@@ -70,6 +70,11 @@
 # we get it.
 (?i).*blockchain.*
 
+# please
+# make it stop
+.*DAI.*
+.*ICO.*
+
 # "You have zero privacy anyway. Get over it." --Scott McNealy
 #
 # You're shocked the NSA is spying on people?
