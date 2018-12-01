@@ -6,13 +6,13 @@
 # pseudojournalism
 (?i).*(businessinsider|techcrunch|crunchbase).*
 
+# pseudouseful
+(?i).*LinkedIn.*
+
 # you're almost buzzfeed now but you have more annoying
 # modal ads and "share this now pleeeease" prompts than
 # even they do
 (?i).*(fastcolabs).*
-
-# pseudouseful
-(?i).*LinkedIn.*
 
 # if you submit the Wikipedia article on the Kola Borehole ONE MORE TIME...
 (?i).*borehole*
@@ -27,9 +27,12 @@
 # or your CSS framework
 (?i).*(spotify|whatsapp).*
 (?i).*(javascript|jquery|in\ (the|your)\ browser).*
+(?i).*(whatsapp|telegram|diaspora|signal|skype).*
 
-# Chat apps are so 90s
-(?i).*(whatsapp|telegram|diaspora|matrix|riot|signal|skype).*
+# Riot gets its own comment because of violates--no, make that
+# *murders*--every single principle outlined in the classic Apple
+# Human Interface Guidelines. Bad Riot. No cookie.
+(?i).*(matrix|riot).*
 
 # Cloud storage, not again
 (?i).*(one\ drive|dropbox).*
@@ -84,6 +87,7 @@
 (?i).*(manning|assange|snowden).*
 (?i).*(wiretap|surveillance).*
 (?i).*drone.*
+(?i).*protonmail.*
 .*(CIA|PRISM|NSA|FISA|CryptoSeal|Silent\ (Mail|Circle)).*
 
 # At least one self-gratifying fluff story
@@ -109,6 +113,10 @@
 .*Musk.*
 .*Mark\ Cuban.*
 
+# the company, not the adjective
+.*Boring.*
+
+
 # YesSQL
 (?i).*(mongo|couch).*
 (?i).*(rethinkdb|nosql)....*
@@ -124,17 +132,21 @@
 .*VC.*
 .*YC\ *
 .*(Show|Ask|Tell)\ HN.*
+(?i).*conversion.*
+
+# interesting technical articles don't tend to have 'technical' in the titl
+# "how do I find a technical co-founder?" ugh
 (?i).*technical.*
+
 
 # three times in one week
 (?i).*first\ [0-9],?0*\ users.*
 
-# "Why I'm leaving Digg" ... "Why I think xyz"
-# Do more, talk less
-(?i).*Why\ I.*
-
 # "How I Developed Better Article Titles"
 (?i).*How\ I.*
+(?i).*here(.?|i)s\ (how|what|all).*
+(?i).*here are.*
+(?i).*Why\ I.*
 
 # Technical articles, please.
 (?i).*(swartz|aaronsw).*
@@ -149,12 +161,6 @@
 (?i).*crowd.*
 (?i).*patent.*
 
-
-# I'm really sorry to put your esteemed organization in my killfile
-# but your web articles from this century belong on medium.com or worse.
-#
-# If the substance and quality of your interstitial ad code is
-# greater than that of your articles, you might want to reconsider
-# your place in the universe.
-
+# not worth reading since the '90s
+# crap articles bute /stellar/ interstitial ad enforcement
 .*spectrum.ieee.org.*
