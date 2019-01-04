@@ -9,9 +9,9 @@
 # pseudouseful
 (?i).*LinkedIn.*
 
-# you're almost buzzfeed now but you have more annoying
-# modal ads and "share this now pleeeease" prompts than
-# even they do
+# you're buzzfeed in everything but name.
+# annoying modal ads and "share this now pleeeease" dialogs?
+# NOPE
 (?i).*(fastcolabs).*
 
 # if you submit the Wikipedia article on the Kola Borehole ONE MORE TIME...
@@ -29,13 +29,14 @@
 (?i).*(javascript|jquery|in\ (the|your)\ browser).*
 (?i).*(whatsapp|telegram|diaspora|signal|skype).*
 
-# Riot gets its own comment because of violates--no, make that
-# *murders*--every single principle outlined in the classic Apple
-# Human Interface Guidelines. Bad Riot. No cookie.
+# Riot gets its own comment because it violates every single 
+# principle outlined in the classic Apple Human Interface Guidelines.
+# Bad Riot. No cookie. (Dec. 2018: experimental version is much improved
+# but keeping this here because YES decentralization is good. we get it.)
 (?i).*(matrix|riot).*
 
-# Cloud storage, not again
-(?i).*(one\ drive|dropbox).*
+# yesyesyes cloud storage
+(?i).*(onedrive|dropbox).*
 
 # Have a nice trip
 (?i).*(spacex|airbnb).*
@@ -116,7 +117,6 @@
 # the company, not the adjective
 .*Boring.*
 
-
 # YesSQL
 (?i).*(mongo|couch).*
 (?i).*(rethinkdb|nosql)....*
@@ -138,11 +138,11 @@
 # "how do I find a technical co-founder?" ugh
 (?i).*technical.*
 
-
 # three times in one week
 (?i).*first\ [0-9],?0*\ users.*
 
 # "How I Developed Better Article Titles"
+# Maybe you should learn the difference between a summary and a creative, thought-provoking title.
 (?i).*How\ I.*
 (?i).*here(.?|i)s\ (how|what|all).*
 (?i).*here are.*
@@ -150,7 +150,6 @@
 
 # Technical articles, please.
 (?i).*(swartz|aaronsw).*
-.*jacquesmattheij.com.*
 
 # I'm an old-fashioned fart with a single server
 (?i).*(cloud|heroku).*
@@ -162,5 +161,5 @@
 (?i).*patent.*
 
 # not worth reading since the '90s
-# crap articles bute /stellar/ interstitial ad enforcement
+# crap articles but /stellar/ interstitial ad enforcement
 .*spectrum.ieee.org.*
