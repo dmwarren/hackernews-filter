@@ -148,6 +148,40 @@
 (?i).*here are.*
 (?i).*Why\ I.*
 
+
+
+# Speaking of crappy titles: "Is X Worth it in 2018?"
+#
+# These titles began life in the very worst parts of YouTube and 
+# have slowly leaked into mainstream media.
+#
+#
+# Headlines in the form of a reductionist, year-specific yes/no 
+# question that is situation-dependent are an insult to your
+# intelligence.
+#
+# Good job warning me your article is only valid for one year
+# and thus not a good investment of my time.
+#
+# Stop the madness.
+#
+# Take 60 seconds and think of a more creative title or don't bother
+# writing anything at all.
+
+(?i).*in 20[0-9][0-9]$
+
+# "worth it in 2018": 2.3 million to date
+# "worth it in 2017": 3.1 million
+# "worth it in 2016": 3.1 million
+# "worth it in 2015": 2.6 million
+#   (moron inflection point)
+# "worth it in 2014": 123
+# "worth it in 2013": 76
+# "worth it in 2012": 97
+# "worth it in 2011": 13
+# "worth it in 2010": 40
+
+
 # Technical articles, please.
 (?i).*(swartz|aaronsw).*
 
