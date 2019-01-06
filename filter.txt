@@ -144,7 +144,7 @@
 # "How I Developed Better Article Titles"
 # Maybe you should learn the difference between a summary and a creative, thought-provoking title.
 (?i).*How\ I.*
-(?i).*here(.?|i)s\ (how|what|all).*
+(?i).*here(.?|i)s\ (how|what|all|why).*
 (?i).*here are.*
 (?i).*Why\ I.*
 
