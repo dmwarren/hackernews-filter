@@ -143,12 +143,18 @@
 
 # "How I Developed Better Article Titles"
 # Maybe you should learn the difference between a summary and a creative, thought-provoking title.
-(?i).*everything you need.*
 (?i).*How\ I.*
 (?i).*here(.?|i)s\ (how|what|all|why).*
 (?i).*here are.*
 (?i).*Why\ I.*
 
+# "All The Things YOU Need To Know!"
+# Number 1: you are a terrible writer
+#
+# Only people who write clickbait and similarly useless articles feel the need to mention ME in their article titles
+# Die, social media attention economy, DIE.
+(?i)^All (you|I|we|the).*
+(?i).*everything you need.*
 
 
 # Speaking of crappy titles: "Is X Worth it in 2018?"
