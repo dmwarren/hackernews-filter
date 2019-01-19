@@ -52,6 +52,9 @@
 # apostrophes and commas are not toys
 (?i).*jacquesmattheij.*
 
+# I'll take "words that have become meaningless" for $800, Alex
+(?i).*innovat.*
+
 # fragile waterfall methodology
 # blah blah blah design the design before you design it
 # because software is simple, right?
