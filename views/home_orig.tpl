@@ -1,23 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
 
-    <title>Filtered HN</title>
+<html>
+	<head>
+		<style>
+body {
+    color: #555;
+    font-family: sans-serif;
+    padding: 0 1em 1em 1em;
+}
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+a {
+    font-family: sans-serif;
+}
 
-  </head>
-  <body bgcolor="#202020">
+td {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 10pt;
+    color: #828282;
+}
+td.crap {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 10pt;
+    color: #aaa;
+}
+.story {
+    line-height: 2em;
+}
+.story.crap {
+    line-height: 0.75em;
+}
+.story.crap a {
+    color: #aaa;
+    font-size: 0.75em;
+}
+.paren {
+  color: #c9c9c9 !important;
+}
+.paren:first-child {
+  margin-left: 5px;
+}
+		</style>
+	</head>
 
-    <div class="container-fluid">
-	<div class="row">
-		<h1>HN filtered</h1>
-		<div class="col-md-9">
-			<table class="table table-striped table-hover table-sm">
+	<body>
+		<h1>HN</h1>
+
+		<table>
 		%for _, storyd in good_stories.items():
             %story = list(storyd.values())[0] 
             <tr>
@@ -31,13 +59,11 @@
             </td>
             </tr>
 		%end
-			</table>
-		</div>
-	</div>
-	<div class="row">
-		<h1 data-toggle="collapse" data-target="#crap">HN crap</h1>
-		<div class="col-md-9 collapse" id="crap">
-			<table class="table table-striped table-hover table-sm">
+		</table>
+
+		<h1>HN crap</h1>
+
+		<table>
 		%for _, storyd in crap_stories.items():
             %story = list(storyd.values())[0] 
             <tr class="crap">
@@ -54,13 +80,7 @@
             </td>
             </tr>
 		%end
-			</table>
-		</div>
-	</div>
-</div>
-
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/scripts.js"></script>
-  </body>
+		</table>
+	</body>
 </html>
+
