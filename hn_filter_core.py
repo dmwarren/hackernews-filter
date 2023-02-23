@@ -25,6 +25,7 @@ def get_stories():
 
     # fetch!
     for page in [1, 2, 3]:
+        print(f"get_stories get page {page}")
         r = requests.get(SCAN_URL + str(page), verify=True)
         souped_body = BeautifulSoup(r.text, 'lxml')
 
@@ -81,6 +82,8 @@ def get_stories():
         if not story['link'].startswith('http'):
             story['link'] = SCAN_URL + story['link']
         stories.append(story)
+
+    print("get_stories out")
     return stories
 
 
@@ -92,6 +95,7 @@ def filter_stories(stories):
         'good': {},
         'crap': {}
     }
+    print("filter_stories in")
     # suck in filter words
     patterns = []
     for line in fileinput.input(VERBOTEN_LIST):
@@ -120,6 +124,7 @@ def filter_stories(stories):
         if story['link'] in result['crap']:
              del result['good'][story['link']]
 
+    print(f"filter_stories out: good={len(result['good'])}, crap={len(result['crap'])}")
     return result
 
 if __name__ == '__main__':
