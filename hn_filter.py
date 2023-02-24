@@ -7,13 +7,13 @@ BOLDOFF = "\033[0m"
 stories = get_stories()
 filtered_stories = filter_stories(stories)
 
-good_stories = filtered_stories['good']
-crap_stories = filtered_stories['crap']
+good_stories = filtered_stories["good"]
+crap_stories = filtered_stories["crap"]
 
-if __name__ == '__main__':
-    for story in filtered_stories['good']:
-        print(BOLDON + story['title'] + BOLDOFF)
-        print("  " + story['link'])
+if __name__ == "__main__":
+    for story in filtered_stories["good"]:
+        print(BOLDON + story["title"] + BOLDOFF)
+        print("  " + story["link"])
         print("")
 
 print("Good: " + str(len(good_stories)))

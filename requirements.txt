@@ -1,5 +1,7 @@
 beautifulsoup4>=4.3.0
 requests>=0.14
 bottle
-paste
+gevent
+gevent-websocket
+Pillow
 lxml
