@@ -34,14 +34,15 @@ def get_stories(page):
         )
 
     raw_stories = storytable_html.find_all("tr")
+
     story_duo = []
     for tr in raw_stories:
         # we want strings, not BeautifulSoup tag objects
         row = tr.encode("utf-8").decode("utf-8")
-        if "spacer" in row:
+        if 'class="spacer"' in row:
             continue
 
-        if "More" in row:
+        if 'class="morespace"' in row:
             break
 
         story_duo.append(tr)
@@ -100,7 +101,7 @@ def filter_stories(stories):
     print("filter_stories in")
     # suck in filter words
     patterns = []
-    for line in fileinput.input(VERBOTEN_LIST):
+    for line_num, line in enumerate(fileinput.input(VERBOTEN_LIST)):
         line = line.strip()
         # skip blank lines
         if len(line) < 3:
@@ -113,7 +114,8 @@ def filter_stories(stories):
 
         patterns.append({
             "compiled": re.compile(line),
-            "why": why
+            "why": why,
+            "line_num": line_num
         })
 
     # combined_re = "(" + ")|(".join(patterns) + ")"
@@ -127,6 +129,7 @@ def filter_stories(stories):
                 story["link"]
             ):
                 story["why"] = pattern["why"]
+                story["line_num"] = pattern["line_num"]
                 result["crap"].append(story)
                 crapFound = True
                 break
@@ -134,12 +137,8 @@ def filter_stories(stories):
         if not crapFound:
             result["good"].append(story)
 
-        # if story["link"] in result["crap"]:
-        #     del result["good"][story["link"]]
+    result["info"] = f"good={len(result['good'])}, crap={len(result['crap'])}"
 
-    print(
-        f"filter_stories out: good={len(result['good'])}, crap={len(result['crap'])}"
-    )
     return result
 
 

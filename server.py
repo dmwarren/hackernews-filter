@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import json
+import random
 from io import BytesIO
 
 import bottle
@@ -20,6 +21,8 @@ def index():
     print(f"Got index request")
     bottle.response.headers["Content-Type"] = "text/html"
     return bottle.static_file("home_ws.html", root="views")
+    # return bottle.template(
+    #     "home_ws.html", ws=os.environ.get("APP_PORT", "31337"))
 
 
 @app.route("/ws")
