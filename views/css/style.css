@@ -1,0 +1,15 @@
+a:link {
+  color: #202020 ;
+}
+a:visited {
+  color: #202020 ;
+}
+.storylink:link {
+  color: #202020 !important;
+}
+.storylink:visited {
+  color: #828282 !important;
+}
+
+table { background-color: #f6f6ef ; }
+body { font-family: Verdana; font-size: 18px ; }

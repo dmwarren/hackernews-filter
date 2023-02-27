@@ -137,7 +137,8 @@ def filter_stories(stories):
         if not crapFound:
             result["good"].append(story)
 
-    result["info"] = f"good={len(result['good'])}, crap={len(result['crap'])}"
+    result["gl"] = f"{len(result['good'])}"
+    result["cl"] = f"{len(result['crap'])}"
 
     return result
 

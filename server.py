@@ -52,17 +52,21 @@ def data_processing():
 
 @app.route("/css/<filename>")
 def css_files(filename):
-    return bottle.static_file(filename, root="views/layoutit/src/css")
+    return bottle.static_file(filename, root="views/css")
 
 
 @app.route("/fonts/<filename>")
 def fonts_files(filename):
-    return bottle.static_file(filename, root="views/layoutit/src/fonts")
+    return bottle.static_file(filename, root="views/fonts")
 
 
 @app.route("/js/<filename>")
 def js_files(filename):
-    return bottle.static_file(filename, root="views/layoutit/src/js")
+    return bottle.static_file(filename, root="views/js")
+
+@app.route("/img/<filename>")
+def js_files(filename):
+    return bottle.static_file(filename, root="views/img")
 
 
 @app.route('/favicon.ico')
