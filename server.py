@@ -18,7 +18,6 @@ app = bottle.Bottle()
 
 @app.route("/")
 def index():
-    print(f"Got index request")
     bottle.response.headers["Content-Type"] = "text/html"
     return bottle.static_file("home_ws.html", root="views")
     # return bottle.template(
@@ -27,7 +26,6 @@ def index():
 
 @app.route("/ws")
 def data_processing():
-    print(f"Got ws request: {bottle.request.environ}")
     wsock = bottle.request.environ.get("wsgi.websocket")
     if not wsock:
         bottle.abort(400, "Expected WebSocket request.")
@@ -39,9 +37,7 @@ def data_processing():
             page_stories = get_stories(page)
             stories += page_stories
             wsock.send(json.dumps({"type": "progress", "data": page}))
-            print(f"From page {page} got {len(page_stories)} stories")
 
-        print(f"Total stories {len(stories)}")
         # Send the data as a JSON object
         data = filter_stories(stories)
         wsock.send(json.dumps({"type": "data", "data": data}))
@@ -95,7 +91,7 @@ def favicon():
 
 
 if __name__ == "__main__":
-    print("Starting...")
+    print("Ready")
     server = pywsgi.WSGIServer(
         ("0.0.0.0", int(os.environ.get("APP_PORT", "31337"))),
         app,

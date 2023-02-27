@@ -56,8 +56,19 @@ def get_stories(page):
         meta_line = story_row[1]
 
         try:
-            story["title"] = link_line.find_all("a")[1].string
-            story["link"] = link_line.find_all("a")[1].get("href")
+            links_in_line = len(link_line.find_all("a"))
+            if links_in_line == 3:
+                story["title"] = link_line.find_all("a")[1].string
+                story["link"] = link_line.find_all("a")[1].get("href")
+            else:
+                # YC announcement
+                story["title"] = link_line.find_all("a")[0].string
+                story["link"] = link_line.find_all("a")[0].get("href")
+                if not story["title"]:
+                    # ASK HN
+                    story["title"] = link_line.find_all("a")[1].string
+                    story["link"] = link_line.find_all("a")[1].get("href")
+
             all_links = meta_line.find_all("a")
             if len(all_links) >= 3:
                 story["comments_num"] = all_links[3].string.replace(
@@ -77,7 +88,7 @@ def get_stories(page):
                     " points", ""
                 )
             else:
-                story["points"] = "unknown"
+                story["points"] = "0"
 
         except IndexError as ie:
             print("IndexError on ", link_line, ie)
@@ -125,14 +136,17 @@ def filter_stories(stories):
         crapFound = False
         for pattern in patterns:
             compiled_re = pattern["compiled"]
-            if compiled_re.match(story["title"]) or compiled_re.match(
-                story["link"]
-            ):
-                story["why"] = pattern["why"]
-                story["line_num"] = pattern["line_num"]
-                result["crap"].append(story)
-                crapFound = True
-                break
+            try:
+                if compiled_re.match(story["title"]) or compiled_re.match(
+                    story["link"]
+                ):
+                    story["why"] = pattern["why"]
+                    story["line_num"] = pattern["line_num"]
+                    result["crap"].append(story)
+                    crapFound = True
+                    break
+            except:
+                continue
 
         if not crapFound:
             result["good"].append(story)
