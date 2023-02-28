@@ -11,5 +11,23 @@ a:visited {
   color: #828282 !important;
 }
 
+.nav-item .accordion-button:not(.collapsed)::after {
+    font: var(--fa-font-regular);
+    content: "\f077";
+    font-weight: 900;
+    height: 20px;
+    width: 20px;
+    margin-left: 5px;
+}
+
+.nav-item .accordion-button::after {
+    font: var(--fa-font-regular);
+    content: "\f078";
+    font-weight: 900;
+    height: 20px;
+    width: 20px;
+    margin-left: 5px;
+}
+
 table { background-color: #f6f6ef ; }
 body { font-family: Verdana; font-size: 18px ; }

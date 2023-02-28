@@ -51,7 +51,7 @@ def css_files(filename):
     return bottle.static_file(filename, root="views/css")
 
 
-@app.route("/fonts/<filename>")
+@app.route("/webfonts/<filename>")
 def fonts_files(filename):
     return bottle.static_file(filename, root="views/fonts")
 
