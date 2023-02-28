@@ -4,14 +4,12 @@ import json
 import random
 import sys
 import logging
-from io import BytesIO
 
 import click
 import bottle
 from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
 from geventwebsocket import WebSocketError
-from PIL import Image
 
 from hn_filter_core import get_stories, filter_stories
 
