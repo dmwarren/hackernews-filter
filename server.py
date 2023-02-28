@@ -2,8 +2,11 @@
 import os
 import json
 import random
+import sys
+import logging
 from io import BytesIO
 
+import click
 import bottle
 from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
@@ -13,15 +16,31 @@ from PIL import Image
 from hn_filter_core import get_stories, filter_stories
 
 
-app = bottle.Bottle()
+logging.basicConfig(
+    level=logging.INFO,
+    format=(
+        "%(asctime)s %(levelname)-8s "
+        "%(pathname)s::%(funcName)s:%(lineno)d: %(message)s"
+    ),
+    datefmt='%Y-%m-%d %H:%M:%S',
+    stream=sys.stdout
+)
+# disable all loggers from different files
+bottle_logger = logging.getLogger('bottle').setLevel(logging.ERROR)
+logging.getLogger('asyncio').setLevel(logging.ERROR)
+logging.getLogger('asyncio.coroutines').setLevel(logging.ERROR)
+logging.getLogger('websockets.server').setLevel(logging.ERROR)
+logging.getLogger('websockets.protocol').setLevel(logging.ERROR)
 
+log = logging.getLogger("hn-filter")
+
+app = bottle.Bottle()
+filter_file = "filter.txt"
 
 @app.route("/")
 def index():
     bottle.response.headers["Content-Type"] = "text/html"
     return bottle.static_file("home_ws.html", root="views")
-    # return bottle.template(
-    #     "home_ws.html", ws=os.environ.get("APP_PORT", "31337"))
 
 
 @app.route("/ws")
@@ -39,7 +58,7 @@ def data_processing():
             wsock.send(json.dumps({"type": "progress", "data": page}))
 
         # Send the data as a JSON object
-        data = filter_stories(stories)
+        data = filter_stories(stories, filter_file)
         wsock.send(json.dumps({"type": "data", "data": data}))
 
     except WebSocketError:
@@ -67,34 +86,31 @@ def js_files(filename):
 
 @app.route('/favicon.ico')
 def favicon():
-    # Generate a random 16x16 image
-    image = Image.new(
-        'RGB', (32, 32),
-        color = (
-            random.randint(0, 255),
-            random.randint(0, 255),
-            random.randint(0, 255)
-        )
+    return bottle.static_file("y18.ico", root="views/img")
+
+
+def get_filter(filterfile):
+    return filterfile
+
+
+@click.command()
+@click.option('--filterfile', type=click.Path(exists=True),
+              default="filter.txt",
+              help='File path for filter.txt file')
+def main(filterfile):
+    app_port = os.environ.get("APP_PORT", "31337")
+    filter_file = filterfile
+
+    log.info(f"Listening on {app_port}. Filter is {filter_file}")
+
+    server = pywsgi.WSGIServer(
+        ("0.0.0.0", int(app_port)),
+        app,
+        handler_class=WebSocketHandler,
+        log=pywsgi._NoopLog()
     )
-
-    # convert the image to bytes and serve it as the response
-    byte_stream = BytesIO()
-    image.save(byte_stream, format='PNG')
-    byte_stream.seek(0)
-
-    bottle.response.set_header('Content-type', 'image/x-icon')
-    bottle.response.set_header('Cache-Control', 'no-cache')
-    bottle.response.set_header('Expires', 'Thu, 01 Jan 1970 00:00:00 GMT')
-
-    # Return the image bytes
-    return byte_stream.read()
+    server.serve_forever()
 
 
 if __name__ == "__main__":
-    print("Ready")
-    server = pywsgi.WSGIServer(
-        ("0.0.0.0", int(os.environ.get("APP_PORT", "31337"))),
-        app,
-        handler_class=WebSocketHandler,
-    )
-    server.serve_forever()
+    main()

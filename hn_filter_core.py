@@ -1,4 +1,6 @@
 import re
+import logging
+import time
 import requests
 import fileinput
 import traceback
@@ -9,20 +11,24 @@ from bs4 import BeautifulSoup
 # to build this kind of thing
 
 
-SCAN_URL = "https://news.ycombinator.com/news?p="
-VERBOTEN_LIST = "filter.txt"
+HN_URL = "https://news.ycombinator.com/news?p="
+log = logging.getLogger(__name__)
 
 
 def get_stories(page):
     """Scrapes hackernews stories and filters the collection."""
-    print("get_stories in")
+    log.debug("in")
     story_rows = []
     stories = []
 
     # fetch!
-    print(f"get_stories get page {page}: {SCAN_URL + str(page)}")
-    r = requests.get(SCAN_URL + str(page), verify=True)
-    print(f"get_stories got response from HN")
+    hn_page = HN_URL + str(page)
+    start_time = time.time()
+    r = requests.get(hn_page, verify=True)
+    end_time = time.time()
+    log.info(f"{hn_page} response "
+             f"in {end_time - start_time:.2f} seconds")
+
     souped_body = BeautifulSoup(r.text, "lxml")
 
     try:
@@ -30,7 +36,7 @@ def get_stories(page):
     except IndexError:
         raise Exception(
             "Can't find news story table. "
-            + "hackernews HTML format probably changed."
+            "hackernews HTML format probably changed."
         )
 
     raw_stories = storytable_html.find_all("tr")
@@ -91,28 +97,28 @@ def get_stories(page):
                 story["points"] = "0"
 
         except IndexError as ie:
-            print("IndexError on ", link_line, ie)
-            traceback.print_exc()
+            log.info("IndexError on ", link_line, ie)
+            traceback.log.info_exc()
             continue
 
         # Handle relative HN links
         if not story["link"].startswith("http"):
-            story["link"] = SCAN_URL + story["link"]
+            story["link"] = HN_URL + story["link"]
         stories.append(story)
 
-    print("get_stories out")
+    log.debug("out")
     return stories
 
 
-def filter_stories(stories):
+def filter_stories(stories, filter_file):
     """
     Filters HN stories.
     """
     result = {"good": [], "crap": []}
-    print("filter_stories in")
+    log.debug("in")
     # suck in filter words
     patterns = []
-    for line_num, line in enumerate(fileinput.input(VERBOTEN_LIST)):
+    for line_num, line in enumerate(fileinput.input(filter_file)):
         line = line.strip()
         # skip blank lines
         if len(line) < 3:
@@ -158,4 +164,4 @@ def filter_stories(stories):
 
 
 if __name__ == "__main__":
-    print(filter_stories(get_stories()))
+    log.info(filter_stories(get_stories()))

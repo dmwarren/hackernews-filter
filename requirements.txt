@@ -3,5 +3,5 @@ requests>=0.14
 bottle
 gevent
 gevent-websocket
-Pillow
 lxml
+click
