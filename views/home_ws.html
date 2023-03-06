@@ -176,7 +176,7 @@
     </script>
 
     <script id="crap-data-template" type="text/template">
-                <% _.each(stories, function(story) { %>
+                <% _.each(stories, function(story, index) { %>
                 <tr class="crap">
                 <td class="crap"><a href="<%= story.comments_link %>" target="_blank"><%= story.comments_num %></a></td>
                 <td class="crap"><span class="score hot" title="Points"><%= story.points %></span></td>
@@ -186,7 +186,7 @@
                         <span class="paren">(</span><span><%= story.host %></span><span class="paren">)</span>
                     </span>
                     <span class="sitebit comhead">
-                        <span class="paren">(</span><span><%= story.why %>, line: <%= story.line_num %></span><span class="paren">)</span>
+                        <span class="paren">(</span><span id="crap<%= index %>" onclick="showWhy(<%= index %>)">Why?</span><span class="paren">)</span>
                     </span>
                 </td>
                 </tr>

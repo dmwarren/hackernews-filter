@@ -165,3 +165,17 @@ function saveUUIDandFilter() {
   });
 }
 
+function showWhy(crapIndex) {
+  $.ajax({
+      url: '/showwhy',
+      type: 'POST',
+      data: {'id': crapIndex},
+      success: function(response) {
+          // Replace the span element with the response
+          $(this).replaceWith(response.why);
+      }.bind(this),
+      error: function(xhr, status, error) {
+          console.log("Error:", error);
+      }
+  });
+}
