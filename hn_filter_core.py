@@ -163,5 +163,14 @@ def filter_stories(stories, filter_file):
     return result
 
 
-if __name__ == "__main__":
-    log.info(filter_stories(get_stories()))
+def get_filter(filename, uuid):
+    filter = ""
+    if not uuid:
+        filter_file = filename
+    else:
+        filter_file = f"{uuid}.txt"
+
+    with fileinput.input(files=filename) as ff:
+        filter =  "\n".join(line.strip() for line in ff)
+
+    return filter

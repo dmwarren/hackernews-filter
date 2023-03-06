@@ -1,5 +1,5 @@
 function reload() {
-    $("#myModal").modal("show");
+    $("#progressModal").modal("show");
 
     // Open a WebSocket connection to the Python Bottle app
     var loc = window.location.href;
@@ -39,7 +39,7 @@ function reload() {
             var dataHtml = crapDataTemplate({ stories: message.data.crap});
             $("#crap-table tbody").html(dataHtml);
 
-            $("#myModal").modal("hide");
+            $("#progressModal").modal("hide");
         }
     };
             // Handle WebSocket connection errors
@@ -81,3 +81,87 @@ function compare(index) {
 function getCellValue(row, index) {
   return $(row).children("td").eq(index).text();
 }
+
+function addToCrap(url) {
+  $.ajax({
+    type: "GET",
+    url: "/addcrap/" + url,
+    success: function(response) {
+      $('#help-filter-text').text(response.url);
+      $('#filter-text').val(response.filter);
+      $('#filterModal').modal('show');
+    },
+    error: function() {
+      alert("Error sending backend request");
+    }
+  });
+}
+
+function editCrap(url) {
+  $.ajax({
+    type: "GET",
+    url: "/editcrap",
+    success: function(response) {
+      $('#filter-text').val(response.filter);
+      $('#filterModal').modal('show');
+    },
+    error: function() {
+      alert("Error sending backend request");
+    }
+  });
+}
+
+function saveCrap() {
+  var crapFilter = { filter: $("#filter-text").val() };
+  $.ajax({
+    type: "POST",
+    url: "/savecrap",
+    data: crapFilter,
+    dataType: "json",
+    contentType: "application/json; charset=utf-8",
+    success: function(response) {
+      $('#filterModal').modal('hide');
+      const toast = new bootstrap.Toast($('#saveToast'));
+      toast.show();
+    },
+    error: function(xhr, status, error) {
+      console.error("Error: " + error.message + " status: " + status); // Log error message
+    }
+  });
+}
+
+function generateUUID() {
+  $.ajax({
+    type: "GET",
+    url: "/getuuid",
+    success: function(response) {
+      $('#filter-text').val(response.filter);
+      $('#uuid').val(response.uuid);
+      $('#uuidModal').modal('show');
+    },
+    error: function() {
+      alert("Error sending backend request");
+    }
+  });
+}
+
+function saveUUIDandFilter() {
+  var this_uuid = $('#uuid').val();
+  var crapFilter = {uuid: this_uuid, filter: $("#filter-text").val()};
+  $.ajax({
+    type: "POST",
+    url: "/newuuid",
+    data: crapFilter,
+    dataType: "json",
+    contentType: "application/json; charset=utf-8",
+    success: function(response) {
+      console.log(response);
+      $('#uuidModal').modal('hide');
+      window.location.href = "./?uuid=" + this_uuid;
+    },
+    error: function(xhr, status, error) {
+      console.error("Error: " + error.message + " status: " + status); // Log error message
+    }
+  });
+}
+

@@ -15,6 +15,7 @@
     <script src="js/bootstrap-5.3.0-alpha1-min.js"></script>
     <script src="js/underscore-1.13.1-min.js"></script>
     <script src="js/purl.js"></script>
+    <script src="js/uuid-8.3.2-min.js"></script>
     <script src="js/scripts.js"></script>
 
     </script>
@@ -60,10 +61,8 @@
 
 
   <!-- Progress Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
+  <div class="modal fade" id="progressModal" role="dialog">
     <div class="modal-dialog">
-
-      <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title">Loading Data...</h4>
@@ -75,6 +74,40 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- Editor Modal -->
+  <div class="modal fade" id="filterModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit filter.txt</h5>
+        </div>
+        <div class="modal-body">
+          <p>You are adding filter for this url: <span id="help-filter-text"></span></p>
+          <p>Lines starting with ">" define sections of similar crap</p>
+          <textarea id="filter-text" class="form-control col-md-8" rows="25"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="saveCrap()">Remove that crap!</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Toast -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="saveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <img src="..." class="rounded me-2" alt="...">
+        <strong class="me-auto">HN Filter</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        New filter was saved
+      </div>
     </div>
   </div>
 
@@ -96,7 +129,6 @@
                 <th>Comments</th>
                 <th>Rank</th>
                 <th>Link</th>
-                <th>Add</th>
               </tr>
             </thead>
             <tbody>
@@ -135,13 +167,11 @@
                 <td><span class="score hot" title="Points"><%= story.points %></span></td>
                 <td class="title">
                     <a href="<%= story.link %>" class="storylink" target="_blank"><%= story.title %></a>
-                    <span class="sitebit comhead">
-                        <span class="paren">(</span><span><%= story.host %></span><span class="paren">)</span>
+                    <span>
+                        (<%= story.host %>)<i id="post-link" onclick="addToCrap('<%= story.host %>')" class="fa-solid fa-thumbs-down ps-2 crapicon"></i>
                     </span>
                 </td>
                 <td>
-                </td>
-                </tr>
                 <% }); %>
     </script>
 

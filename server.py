@@ -11,7 +11,7 @@ from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
 from geventwebsocket import WebSocketError
 
-from hn_filter_core import get_stories, filter_stories
+from hn_filter_core import get_stories, filter_stories, get_filter
 
 
 logging.basicConfig(
@@ -35,13 +35,54 @@ log = logging.getLogger("hn-filter")
 app = bottle.Bottle()
 filter_file = "filter.txt"
 
+
+def require_uuid(is_post=False):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            def valid_uuid(uuid_string):
+                try:
+                    UUID(uuid_string)
+                    return True
+                except ValueError:
+                    log.info(f"Invalid uuid: {uuid_string}")
+                    return False
+
+            if bottle.request.method == "POST":
+                uuid = bottle.request.forms.get("uuid")
+                log.info(f"POST {uuid}")
+            else:
+                uuid = bottle.request.query.get("uuid")
+                log.info(f"GET {uuid}")
+                if not uuid:
+                    uuid = bottle.request.get_cookie("uuid")
+                    log.info(f"Cookie {uuid}")
+
+            if not uuid or not valid_uuid(uuid):
+                log.info("Invalid or not set uuid")
+                bottle.abort(bottle.redirect("/uuidindex"))
+
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
 @app.route("/")
+@require_uuid()
 def index():
     bottle.response.headers["Content-Type"] = "text/html"
     return bottle.static_file("home_ws.html", root="views")
 
 
+@app.route("/uuidindex")
+def gen_uuid_index():
+    bottle.response.headers["Content-Type"] = "text/html"
+    return bottle.static_file("generate.html", root="views")
+
+
 @app.route("/ws")
+@require_uuid()
 def data_processing():
     wsock = bottle.request.environ.get("wsgi.websocket")
     if not wsock:
@@ -61,6 +102,51 @@ def data_processing():
 
     except WebSocketError:
         pass
+
+
+@app.route("/addcrap/<url>")
+@require_uuid()
+def add_crap(url):
+    bottle.response.headers["Content-Type"] = "application/json"
+    return {"url": url, "filter": get_filter(filter_file)}
+
+
+@app.route("/editcrap")
+@require_uuid()
+def edit_crap():
+    bottle.response.headers["Content-Type"] = "application/json"
+    return {"filter": get_filter(filter_file)}
+
+@app.route("/getuuid")
+def gen_actual_uuid():
+    bottle.response.headers["Content-Type"] = "application/json"
+    return {"filter": get_filter(filter_file, None), "uuid": str(uuid4())}
+
+@app.route("/savecrap", method="POST")
+@require_uuid()
+def save_crap():
+    # data = bottle.request.json
+
+    new_filter = bottle.request.forms.get("filter")
+    # save_filter(new_filter)
+
+    return {"success": "success"}
+
+
+@app.route("/newuuid", method="POST")
+@require_uuid()
+def save_new_uuid():
+    new_filter = bottle.request.forms.get("filter")
+    new_uuid = bottle.request.forms.get("uuid")
+    log.info(f"uuid: {new_uuid}")
+    # save_filter(new_filter, new_uuid)
+    bottle.response.set_cookie(
+        'uuid',
+        new_uuid,
+        max_age=31536000  # 1 year in seconds
+    )
+
+    return {"success": "success"}
 
 
 @app.route("/css/<filename>")
@@ -85,10 +171,6 @@ def js_files(filename):
 @app.route('/favicon.ico')
 def favicon():
     return bottle.static_file("y18.ico", root="views/img")
-
-
-def get_filter(filterfile):
-    return filterfile
 
 
 @click.command()

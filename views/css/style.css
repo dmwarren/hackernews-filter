@@ -29,5 +29,8 @@ a:visited {
     margin-left: 5px;
 }
 
+.crapicon {
+    cursor: pointer;
+}
 table { background-color: #f6f6ef ; }
 body { font-family: Verdana; font-size: 18px ; }
