@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 import json
-import random
 import sys
 import logging
 
@@ -20,15 +19,15 @@ logging.basicConfig(
         "%(asctime)s %(levelname)-8s "
         "%(pathname)s::%(funcName)s:%(lineno)d: %(message)s"
     ),
-    datefmt='%Y-%m-%d %H:%M:%S',
-    stream=sys.stdout
+    datefmt="%Y-%m-%d %H:%M:%S",
+    stream=sys.stdout,
 )
 # disable all loggers from different files
-bottle_logger = logging.getLogger('bottle').setLevel(logging.ERROR)
-logging.getLogger('asyncio').setLevel(logging.ERROR)
-logging.getLogger('asyncio.coroutines').setLevel(logging.ERROR)
-logging.getLogger('websockets.server').setLevel(logging.ERROR)
-logging.getLogger('websockets.protocol').setLevel(logging.ERROR)
+bottle_logger = logging.getLogger("bottle").setLevel(logging.ERROR)
+logging.getLogger("asyncio").setLevel(logging.ERROR)
+logging.getLogger("asyncio.coroutines").setLevel(logging.ERROR)
+logging.getLogger("websockets.server").setLevel(logging.ERROR)
+logging.getLogger("websockets.protocol").setLevel(logging.ERROR)
 
 log = logging.getLogger("hn-filter")
 
@@ -91,13 +90,14 @@ def data_processing():
         stories = []
         # Send progress updates until the data is ready
         for page in [1, 2, 3]:
-        # for page in [1]:
+            # for page in [1]:
             page_stories = get_stories(page)
             stories += page_stories
             wsock.send(json.dumps({"type": "progress", "data": page}))
 
         # Send the data as a JSON object
         data = filter_stories(stories, filter_file)
+        app.crap_stories = data["crap"]
         wsock.send(json.dumps({"type": "data", "data": data}))
 
     except WebSocketError:
@@ -163,20 +163,33 @@ def fonts_files(filename):
 def js_files(filename):
     return bottle.static_file(filename, root="views/js")
 
+
 @app.route("/img/<filename>")
-def js_files(filename):
+def img_files(filename):
     return bottle.static_file(filename, root="views/img")
 
 
-@app.route('/favicon.ico')
+@app.route("/favicon.ico")
 def favicon():
     return bottle.static_file("y18.ico", root="views/img")
 
 
+@app.route("/showwhy", method="POST")
+def show_why():
+    return
+
+
+def get_filter(filterfile):
+    return filterfile
+
+
 @click.command()
-@click.option('--filterfile', type=click.Path(exists=True),
-              default="filter.txt",
-              help='File path for filter.txt file')
+@click.option(
+    "--filterfile",
+    type=click.Path(exists=True),
+    default="filter.txt",
+    help="File path for filter.txt file",
+)
 def main(filterfile):
     app_port = os.environ.get("APP_PORT", "31337")
     filter_file = filterfile
@@ -187,7 +200,7 @@ def main(filterfile):
         ("0.0.0.0", int(app_port)),
         app,
         handler_class=WebSocketHandler,
-        log=pywsgi._NoopLog()
+        log=pywsgi._NoopLog(),
     )
     server.serve_forever()
 
