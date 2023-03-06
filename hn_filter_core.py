@@ -7,9 +7,6 @@ import traceback
 from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
-# I like that we have to import a 'bs' library
-# to build this kind of thing
-
 
 HN_URL = "https://news.ycombinator.com/news?p="
 log = logging.getLogger(__name__)
@@ -26,10 +23,9 @@ def get_stories(page):
     start_time = time.time()
     r = requests.get(hn_page, verify=True)
     end_time = time.time()
-    log.info(f"{hn_page} response "
-             f"in {end_time - start_time:.2f} seconds")
+    log.info(f"{hn_page} response " f"in {end_time - start_time:.2f} seconds")
 
-    souped_body = BeautifulSoup(r.text, "lxml")
+    souped_body = BeautifulSoup(r.text, "html.parser")
 
     try:
         storytable_html = souped_body("table")[2]
@@ -117,8 +113,8 @@ def filter_stories(stories, filter_file):
     result = {"good": [], "crap": []}
     log.debug("in")
     # suck in filter words
-    patterns = []
-    for line_num, line in enumerate(fileinput.input(filter_file)):
+    patterns = set()
+    for line in fileinput.input(filter_file):
         line = line.strip()
         # skip blank lines
         if len(line) < 3:
@@ -127,34 +123,21 @@ def filter_stories(stories, filter_file):
         if re.match(r"^#", line):
             continue
         if re.match(r"^>", line):
-            why = line
+            continue
 
-        patterns.append({
-            "compiled": re.compile(line),
-            "why": why,
-            "line_num": line_num
-        })
+        patterns.add(re.compile(line))
 
+    patterns = frozenset(patterns)
     # combined_re = "(" + ")|(".join(patterns) + ")"
     # compiled_re = re.compile(combined_re)
 
     for story in stories:
-        crapFound = False
-        for pattern in patterns:
-            compiled_re = pattern["compiled"]
-            try:
-                if compiled_re.match(story["title"]) or compiled_re.match(
-                    story["link"]
-                ):
-                    story["why"] = pattern["why"]
-                    story["line_num"] = pattern["line_num"]
-                    result["crap"].append(story)
-                    crapFound = True
-                    break
-            except:
-                continue
-
-        if not crapFound:
+        if any(
+            patt.match(story["title"]) or patt.match(story["link"])
+            for patt in patterns
+        ):
+            result["crap"].append(story)
+        else:
             result["good"].append(story)
 
     result["gl"] = f"{len(result['good'])}"
