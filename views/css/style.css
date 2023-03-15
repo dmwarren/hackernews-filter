@@ -31,6 +31,15 @@ a:visited {
 
 .crapicon {
     cursor: pointer;
+    opacity: 0.5;
 }
 table { background-color: #f6f6ef ; }
 body { font-family: Verdana; font-size: 18px ; }
+
+.invisible {
+    visibility: hidden;
+    border: none;
+}
+
+.semitransparent {
+}

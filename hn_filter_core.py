@@ -1,5 +1,8 @@
+import os
 import re
 import logging
+import json
+import shutil
 import time
 import requests
 import fileinput
@@ -76,6 +79,9 @@ def get_stories(page):
                 story["comments_num"] = all_links[3].string.replace(
                     "\xa0comments", ""
                 )
+                if story["comments_num"] == "discuss":
+                    story["comments_num"] == "0"
+
                 story[
                     "comments_link"
                 ] = "https://news.ycombinator.com/" + all_links[3].get("href")
@@ -131,14 +137,17 @@ def filter_stories(stories, filter_file):
     # combined_re = "(" + ")|(".join(patterns) + ")"
     # compiled_re = re.compile(combined_re)
 
-    for story in stories:
-        if any(
-            patt.match(story["title"]) or patt.match(story["link"])
-            for patt in patterns
-        ):
-            result["crap"].append(story)
-        else:
-            result["good"].append(story)
+    try:
+        for story in stories:
+            if any(
+                patt.match(story["title"]) or patt.match(story["link"])
+                for patt in patterns
+            ):
+                result["crap"].append(story)
+            else:
+                result["good"].append(story)
+    except TypeError as te:
+        log.warning(f"{story} {te}")
 
     result["gl"] = f"{len(result['good'])}"
     result["cl"] = f"{len(result['crap'])}"
@@ -146,14 +155,75 @@ def filter_stories(stories, filter_file):
     return result
 
 
-def get_filter(filename, uuid):
-    filter = ""
-    if not uuid:
-        filter_file = filename
-    else:
-        filter_file = f"{uuid}.txt"
+def save_filter_file(filename, filter_lines):
+    with open(filename, "w") as ff:
+        ff.writelines(filter_lines)
 
+
+def get_filter(filename):
     with fileinput.input(files=filename) as ff:
-        filter =  "\n".join(line.strip() for line in ff)
+        filter = "\n".join(line.strip() for line in ff)
 
     return filter
+
+
+def find_user(user_id, user_file):
+    with open(user_file, "r") as uf:
+        users = json.load(uf)
+        user = users.get(user_id, {})
+        if user:
+            user["email"] = user_id
+            return user
+
+        return {}
+
+
+def register_user(user_id, pwd, user_file, filter_file, config_path):
+    user_filter_filename = os.path.join(config_path, f"{user_id}-filter.txt")
+
+    with open(user_file, "r") as uf:
+        users = json.load(uf)
+        users[user_id] = {
+            "password": pwd,
+            "filter_file": user_filter_filename,
+            "admin": False
+        }
+
+    shutil.copyfile(
+        filter_file,
+        user_filter_filename
+    )
+
+    with open(user_file, "w") as uf:
+        json.dump(users, uf)
+
+
+def why_crap(descr, url, filter_file):
+    """
+    Filters HN stories.
+    """
+    # suck in filter words
+    patterns = []
+    section = ""
+    for line in fileinput.input(filter_file):
+        line = line.strip()
+        # skip blank lines
+        if len(line) < 3:
+            continue
+        # skip comments
+        if re.match(r"^#", line):
+            continue
+        if re.match(r"^>", line):
+            section = line
+            continue
+
+        patterns.append({
+            "rex": re.compile(line),
+            "section": section
+        })
+
+    for patt in patterns:
+        if patt["rex"].match(descr) or patt["rex"].match(url):
+            return patt["section"]
+
+    return "unknown"

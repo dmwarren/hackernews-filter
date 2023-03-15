@@ -5,3 +5,6 @@ gevent
 gevent-websocket
 lxml
 click
+fastpbkdf2
+passlib
+bottle-login

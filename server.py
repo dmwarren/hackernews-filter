@@ -6,12 +6,23 @@ import logging
 
 import click
 import bottle
+
+from passlib.context import CryptContext
+
 from gevent import pywsgi
 from geventwebsocket.handler import WebSocketHandler
 from geventwebsocket import WebSocketError
+from bottle_login import LoginPlugin
 
-from hn_filter_core import get_stories, filter_stories, get_filter
+from hn_filter_core import (
+    get_stories, filter_stories, get_filter, find_user,
+    register_user, save_filter_file, why_crap
+)
 
+
+CONFIG_PATH = "./"
+DEFAULT_FILTER_FILE = "filter.txt"
+USER_FILE = "users.json"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -32,43 +43,25 @@ logging.getLogger("websockets.protocol").setLevel(logging.ERROR)
 log = logging.getLogger("hn-filter")
 
 app = bottle.Bottle()
-filter_file = "filter.txt"
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "not_a_secret_at_all")
+app.pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
+login = app.install(LoginPlugin())
 
 
-def require_uuid(is_post=False):
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            def valid_uuid(uuid_string):
-                try:
-                    UUID(uuid_string)
-                    return True
-                except ValueError:
-                    log.info(f"Invalid uuid: {uuid_string}")
-                    return False
+@login.load_user
+def load_user(user_id):
+    return find_user(user_id, USER_FILE)
 
-            if bottle.request.method == "POST":
-                uuid = bottle.request.forms.get("uuid")
-                log.info(f"POST {uuid}")
-            else:
-                uuid = bottle.request.query.get("uuid")
-                log.info(f"GET {uuid}")
-                if not uuid:
-                    uuid = bottle.request.get_cookie("uuid")
-                    log.info(f"Cookie {uuid}")
 
-            if not uuid or not valid_uuid(uuid):
-                log.info("Invalid or not set uuid")
-                bottle.abort(bottle.redirect("/uuidindex"))
+def filter_file_name():
+    user = login.get_user()
+    if user:
+        return user["filter_file"]
 
-            return func(*args, **kwargs)
+    return DEFAULT_FILTER_FILE
 
-        return wrapper
-
-    return decorator
 
 @app.route("/")
-@require_uuid()
 def index():
     bottle.response.headers["Content-Type"] = "text/html"
     return bottle.static_file("home_ws.html", root="views")
@@ -80,73 +73,53 @@ def gen_uuid_index():
     return bottle.static_file("generate.html", root="views")
 
 
-@app.route("/ws")
-@require_uuid()
-def data_processing():
+@app.route("/ws/<num_pages>")
+def data_processing(num_pages):
+    log.info(f"num pages: {num_pages}")
     wsock = bottle.request.environ.get("wsgi.websocket")
     if not wsock:
         bottle.abort(400, "Expected WebSocket request.")
     try:
         stories = []
         # Send progress updates until the data is ready
-        for page in [1, 2, 3]:
-            # for page in [1]:
+        for page in range(1, int(num_pages) + 1):
+            log.info(f"Reading page {page}")
             page_stories = get_stories(page)
-            stories += page_stories
+            stories.extend(page_stories)
             wsock.send(json.dumps({"type": "progress", "data": page}))
 
-        # Send the data as a JSON object
-        data = filter_stories(stories, filter_file)
-        app.crap_stories = data["crap"]
+        data = filter_stories(stories, filter_file_name())
+
         wsock.send(json.dumps({"type": "data", "data": data}))
 
     except WebSocketError:
         pass
 
 
-@app.route("/addcrap/<url>")
-@require_uuid()
-def add_crap(url):
-    bottle.response.headers["Content-Type"] = "application/json"
-    return {"url": url, "filter": get_filter(filter_file)}
-
-
 @app.route("/editcrap")
-@require_uuid()
 def edit_crap():
     bottle.response.headers["Content-Type"] = "application/json"
-    return {"filter": get_filter(filter_file)}
 
-@app.route("/getuuid")
-def gen_actual_uuid():
-    bottle.response.headers["Content-Type"] = "application/json"
-    return {"filter": get_filter(filter_file, None), "uuid": str(uuid4())}
+    return {"filter": get_filter(filter_file_name())}
+
 
 @app.route("/savecrap", method="POST")
-@require_uuid()
-def save_crap():
-    # data = bottle.request.json
+def save_filter():
+    bottle.response.headers["Content-Type"] = "application/json"
+    filter_lines = bottle.request.forms.get("filter_lines")
 
-    new_filter = bottle.request.forms.get("filter")
-    # save_filter(new_filter)
-
-    return {"success": "success"}
+    save_filter_file(filter_file_name(), filter_lines)
+    return {"success": True}
 
 
-@app.route("/newuuid", method="POST")
-@require_uuid()
-def save_new_uuid():
-    new_filter = bottle.request.forms.get("filter")
-    new_uuid = bottle.request.forms.get("uuid")
-    log.info(f"uuid: {new_uuid}")
-    # save_filter(new_filter, new_uuid)
-    bottle.response.set_cookie(
-        'uuid',
-        new_uuid,
-        max_age=31536000  # 1 year in seconds
-    )
+@app.route("/showwhy", method="POST")
+def show_why():
+    descr = bottle.request.forms.get("story")
+    url =  bottle.request.forms.get("url")
 
-    return {"success": "success"}
+    why = why_crap(descr, url, filter_file_name())
+    bottle.response.headers["Content-Type"] = "application/json"
+    return {"why": why}
 
 
 @app.route("/css/<filename>")
@@ -174,27 +147,74 @@ def favicon():
     return bottle.static_file("y18.ico", root="views/img")
 
 
-@app.route("/showwhy", method="POST")
-def show_why():
-    return
+@app.route("/check_login_status")
+def check_login_status():
+    user = login.get_user()
+    if user:
+        data = {"logged_in": True, "email": user["email"]}
+    else:
+        data = {"logged_in": False, "email": ""}
+
+    bottle.response.headers["Content-Type"] = "application/json"
+    return data
 
 
-def get_filter(filterfile):
-    return filterfile
+@app.route("/register", method="POST")
+def do_register():
+    user_id = bottle.request.forms.get("email")
+    pw = bottle.request.forms.get("pass")
+    hashed_pw = app.pwd_context.hash(pw)
+
+    register_user(
+        user_id, hashed_pw, USER_FILE, DEFAULT_FILTER_FILE, CONFIG_PATH
+    )
+    login.login_user(user_id)
+
+    bottle.response.headers["Content-Type"] = "application/json"
+    return {"success": True}
+
+
+@app.route("/login", method="POST")
+def do_login():
+    user_id = bottle.request.forms.get("email")
+    pw = bottle.request.forms.get("pass")
+    bottle.response.headers["Content-Type"] = "application/json"
+
+    reg_user = find_user(user_id, USER_FILE)
+    if reg_user:
+        if app.pwd_context.verify(pw, reg_user["password"]):
+            login.login_user(user_id)
+            return {"success": True}
+
+    return {"success": False}
+
+
+@app.route("/logout")
+def do_logout():
+    login.logout_user()
+    bottle.response.headers["Content-Type"] = "application/json"
+
+    return {"success": True}
 
 
 @click.command()
 @click.option(
-    "--filterfile",
+    "--configpath",
     type=click.Path(exists=True),
-    default="filter.txt",
-    help="File path for filter.txt file",
+    default=CONFIG_PATH,
+    help="File path for filter.txt and user.json files",
 )
-def main(filterfile):
+def main(configpath):
     app_port = os.environ.get("APP_PORT", "31337")
-    filter_file = filterfile
+    global CONFIG_PATH
+    global DEFAULT_FILTER_FILE
+    global USER_FILE
 
-    log.info(f"Listening on {app_port}. Filter is {filter_file}")
+    CONFIG_PATH = configpath
+    DEFAULT_FILTER_FILE = os.path.join(configpath, "filter.txt")
+    USER_FILE = os.path.join(configpath, "users.json")
+
+    log.info(f"Listening on {app_port}. Config path is {configpath}")
 
     server = pywsgi.WSGIServer(
         ("0.0.0.0", int(app_port)),
