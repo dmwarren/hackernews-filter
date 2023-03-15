@@ -31,7 +31,7 @@
 # (?i).*(javascript|jquery|in\ (the|your)\ browser).*
 # (?i).*(whatsapp|telegram|diaspora|signal|skype).*
 
-# Riot gets its own comment because it violates every single 
+# Riot gets its own comment because it violates every single
 # principle outlined in the classic Apple Human Interface Guidelines.
 # Bad Riot. No cookie. (Dec. 2018: experimental version is much improved
 # but keeping this here because YES decentralization is good. we get it.)
@@ -127,11 +127,6 @@
 .*Mark\ Cuban.*
 .*Boring.*
 
-# YesSQL
-#(?i).*(mongo|couch).*
-#(?i).*(rethinkdb|nosql)....*
-#.*(Redis|Riak).*
-
 # I don't care about HN/startup culture and buzzwords
 > buzzwords
 (?i).*help\ us\ .*
@@ -159,7 +154,7 @@
 (?i).*here(.?|i)s\ (how|what|all|why).*
 (?i).*here are.*
 
-> "All The Things YOU Need To Know!"
+>"All The Things YOU Need To Know!"
 # Number 1: you are a terrible writer
 #
 # Only people who write clickbait and similarly useless articles feel the need to mention ME in their article titles
@@ -168,13 +163,13 @@
 (?i).*everything you need.*
 
 
-# Speaking of crappy titles: "Is X Worth it in 2018?"
+> Speaking of crappy titles: "Is X Worth it in 2018?"
 #
-# These titles began life in the very worst parts of YouTube and 
+# These titles began life in the very worst parts of YouTube and
 # have slowly leaked into mainstream media.
 #
 #
-# Headlines in the form of a reductionist, year-specific yes/no 
+# Headlines in the form of a reductionist, year-specific yes/no
 # question that is situation-dependent are an insult to your
 # intelligence.
 #
@@ -200,11 +195,26 @@
 # "worth it in 2010": 40
 
 
-# Technical articles, please.
+> Technical articles, please.
 (?i).*lawandcrime\.com.*
 (?i).*phys\.org.*
+(?i).*smithsonianmag\.com
+(?i).*bloomberg\.com
+(?i).*nakedcapitalism\.com
+(?i).*forbes\.com
+(?i).*pregnancy.*
+.*fastcompany\.com
+.*sfgate\.com
+.*fortune\.com
+.*bankofengland\.co\.uk
+.*science.org
+.*seekingalpha.com
+.*fdic.gov
+.*federalreserve.gov
+.*firstrepublic.com
+.*thehindubusinessline.com
 
-# I'm an old-fashioned fart with a single server
+> I'm an old-fashioned fart with a single server
 (?i).*(cloud|heroku).*
 
 > Lamemedia
@@ -227,6 +237,8 @@
 (?i).*apnews.*
 (?i).*rollingstone.*
 (?i).*openthemagazine.*
+(?i).*ftc\.gov
+.*nypost\.com
 
 > General science stuff
 # crap articles but /stellar/ interstitial ad enforcement
