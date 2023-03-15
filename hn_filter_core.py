@@ -185,8 +185,7 @@ def register_user(user_id, pwd, user_file, filter_file, config_path):
         users = json.load(uf)
         users[user_id] = {
             "password": pwd,
-            "filter_file": user_filter_filename,
-            "admin": False
+            "filter_file": user_filter_filename
         }
 
     shutil.copyfile(
